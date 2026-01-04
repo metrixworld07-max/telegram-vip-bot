@@ -1,39 +1,51 @@
 import os
+import asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import Application, CommandHandler
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv("BOT_TOKEN")
 
-IMAGE_URL = "https://i.postimg.cc/sx3sryfQ/IMG-20260104-095102-116.jpg"
+async def start(update: Update, context):
+    text = """🏆 These Are The Pros Of Joining MARCUS Community 👇
 
-CAPTION = """🏆 These Are The Pros Of Joining MARCUS Community 👇
-
-🔹 Free COPY TRADING 📈
+🔹Free COPY TRADING 📈 
 🔹 Loss Recovery Session 💯
-🔹 10–15 Non MTG Insights 🚀
-🔹 AI TRADE BOT FREE 🤖
-🔹 Daily Free 90% Working Strategy 📈
-🔹 5+ Years of Experience in Binary 📈
-🔹 Support 24/7 Assistance 📱
+🔹10-15 Non Mtg Insights 🚀
+🔹AI TRADE BOT FREE 🤖
+🔹Daily Free 90% Working Strategy 📈
+🔹5+ Years of Experience in Binary 📈
+🔹Support 24/7 Assistance📱
 
-🤔 Any Questions? Msg Here 👇
+🚀JOIN VIP GROUP LINK🔗👇
+
+🔗 https://t.me/tradingsmarcus
+
+🤔 Any Questions Msg Here 📥 
+
 👉 @PoOfficial123 ✅
 
-👇👇 TAP ON JOIN VIP NOW 👇👇
-"""
-
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [
-        [InlineKeyboardButton("🚀 JOIN VIP GROUP 💸", url="https://t.me/tradingsmarcus")]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-
+👇👇 TAP ON JOIN VIP NOW 👇 👇"""
+    
+    button = InlineKeyboardButton("🚀 JOIN VIP GROUP 💸", url="https://t.me/tradingsmarcus")
+    keyboard = InlineKeyboardMarkup([[button]])
+    
     await update.message.reply_photo(
-        photo=IMAGE_URL,
-        caption=CAPTION,
-        reply_markup=reply_markup
+        photo="https://i.postimg.cc/sx3sryfQ/IMG-20260104-095102-116.jpg",
+        caption=text,
+        reply_markup=keyboard
     )
 
-app = ApplicationBuilder().token(BOT_TOKEN).build()
-app.add_handler(CommandHandler("start", start))
-app.run_polling()
+def main():
+    if not TOKEN:
+        print("❌ ERROR: BOT_TOKEN not set!")
+        return
+    
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("promo", start))
+    
+    print("✅ Bot running on Koyeb!")
+    app.run_polling(drop_pending_updates=True)
+
+if __name__ == "__main__":
+    main()
